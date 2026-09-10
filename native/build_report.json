@@ -1,0 +1,196 @@
+{
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "python_executable": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+  "commands": [
+    {
+      "argv": [
+        "clang",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-dynamiclib",
+        "-Wl,-install_name,@rpath/libaegis_native.dylib",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/aegis_queue.c",
+        "-o",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/libaegis_native.dylib"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/aegis_queue.c",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/queue_stress.c",
+        "-o",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/include/python3.14",
+        "-DAEGIS_PYTHON_HOME=\"/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14\"",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/aegisdbd.c",
+        "/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/Python",
+        "-Wl,-rpath,/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14",
+        "-ldl",
+        "-framework",
+        "CoreFoundation",
+        "-o",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "file",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/libaegis_native.dylib"
+      ],
+      "returncode": 0,
+      "stdout": "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd:              Mach-O 64-bit executable arm64\n/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/libaegis_native.dylib: Mach-O 64-bit dynamically linked shared library arm64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "otool",
+        "-L",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd"
+      ],
+      "returncode": 0,
+      "stdout": "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd:\n\t/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/Python (compatibility version 3.14.0, current version 3.14.0)\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)\n\t/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 5026.5.4)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress",
+        "100000"
+      ],
+      "returncode": 0,
+      "stdout": "{\"channels\":4,\"messages_per_channel\":100000,\"verified_messages\":400000,\"full_retries\":582656,\"empty_retries\":768083}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address,undefined",
+        "-pthread",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/aegis_queue.c",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/queue_stress.c",
+        "-o",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress_address_undefined"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress_address_undefined",
+        "100000"
+      ],
+      "returncode": 0,
+      "stdout": "{\"channels\":4,\"messages_per_channel\":100000,\"verified_messages\":400000,\"full_retries\":669001,\"empty_retries\":864159}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=thread",
+        "-pthread",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/aegis_queue.c",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/native/queue_stress.c",
+        "-o",
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress_thread"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegis_queue_stress_thread",
+        "100000"
+      ],
+      "returncode": 0,
+      "stdout": "{\"channels\":4,\"messages_per_channel\":100000,\"verified_messages\":400000,\"full_retries\":300112,\"empty_retries\":368504}\n",
+      "stderr": ""
+    }
+  ],
+  "sanitizers": {
+    "address_undefined": {
+      "status": "passed",
+      "stress": {
+        "channels": 4,
+        "messages_per_channel": 100000,
+        "verified_messages": 400000,
+        "full_retries": 669001,
+        "empty_retries": 864159
+      }
+    },
+    "thread": {
+      "status": "passed",
+      "stress": {
+        "channels": 4,
+        "messages_per_channel": 100000,
+        "verified_messages": 400000,
+        "full_retries": 300112,
+        "empty_retries": 368504
+      }
+    }
+  },
+  "python_library": "/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/Python",
+  "binary_identity": "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd:              Mach-O 64-bit executable arm64\n/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/libaegis_native.dylib: Mach-O 64-bit dynamically linked shared library arm64",
+  "linked_libraries": "/Users/home/Documents/Codex/2026-09-07-architecture-and-prompt-engineering-for-long-5/bin/aegisdbd:\n\t/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/Python (compatibility version 3.14.0, current version 3.14.0)\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)\n\t/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 5026.5.4)\n",
+  "stress": {
+    "channels": 4,
+    "messages_per_channel": 100000,
+    "verified_messages": 400000,
+    "full_retries": 582656,
+    "empty_retries": 768083
+  },
+  "status": "passed"
+}

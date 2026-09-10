@@ -1,0 +1,729 @@
+{
+  "runs": [
+    {
+      "seed": 1,
+      "chaos_ticks": 10000,
+      "total_ticks": 13500,
+      "transactions": 972,
+      "commit_index": 972,
+      "invariant_checks": 13501,
+      "storage_comparisons": 36169,
+      "durability_checks": 13468,
+      "liveness_windows": 11,
+      "sstable_digest": "e82e4c6dbd9c4aff892374befbb97a956f400b46564c78fb6ebc936e0c1e29cb",
+      "views": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "replicas": [
+        {
+          "crashes": 4,
+          "recoveries": 1,
+          "view_changes": 5,
+          "commits": 49,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 7,
+          "recoveries": 6,
+          "view_changes": 5,
+          "commits": 278,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 4,
+          "recoveries": 3,
+          "view_changes": 5,
+          "commits": 75,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 3,
+          "recoveries": 3,
+          "view_changes": 5,
+          "commits": 330,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 6,
+          "recoveries": 3,
+          "view_changes": 5,
+          "commits": 194,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        }
+      ],
+      "chaos": {
+        "partitions": 10,
+        "asymmetric_partitions": 6,
+        "crashes": 10,
+        "corruptions": 10,
+        "disk_fault_windows": 10
+      },
+      "network": {
+        "sent": 54587,
+        "delivered": 54438,
+        "dropped": 1063,
+        "partitioned": 1010,
+        "duplicated": 2096,
+        "corrupted": 172,
+        "rejected": 172,
+        "unavailable": 0
+      },
+      "disks": [
+        {
+          "reads": 4630,
+          "writes": 2659,
+          "read_failures": 0,
+          "torn_writes": 1,
+          "stalls": 2,
+          "crashes": 4,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 4630,
+          "completed_writes": 2657,
+          "erases": 1
+        },
+        {
+          "reads": 1914,
+          "writes": 2352,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 1,
+          "crashes": 7,
+          "cancelled": 3,
+          "corruptions": 4,
+          "completed_reads": 1914,
+          "completed_writes": 2349,
+          "erases": 6
+        },
+        {
+          "reads": 1273,
+          "writes": 2682,
+          "read_failures": 16,
+          "torn_writes": 2,
+          "stalls": 31,
+          "crashes": 4,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 1257,
+          "completed_writes": 2679,
+          "erases": 3
+        },
+        {
+          "reads": 1373,
+          "writes": 2373,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 0,
+          "crashes": 3,
+          "cancelled": 1,
+          "corruptions": 3,
+          "completed_reads": 1373,
+          "completed_writes": 2372,
+          "erases": 3
+        },
+        {
+          "reads": 2666,
+          "writes": 2411,
+          "read_failures": 0,
+          "torn_writes": 1,
+          "stalls": 1,
+          "crashes": 6,
+          "cancelled": 3,
+          "corruptions": 1,
+          "completed_reads": 2666,
+          "completed_writes": 2407,
+          "erases": 3
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "chaos_ticks": 10000,
+      "total_ticks": 13500,
+      "transactions": 1015,
+      "commit_index": 1015,
+      "invariant_checks": 13501,
+      "storage_comparisons": 32787,
+      "durability_checks": 13460,
+      "liveness_windows": 11,
+      "sstable_digest": "07026ac3224d8942d602fda02df54e90d6527360df0aa703333d96741e5f8eef",
+      "views": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "replicas": [
+        {
+          "crashes": 3,
+          "recoveries": 1,
+          "view_changes": 3,
+          "commits": 56,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 8,
+          "recoveries": 6,
+          "view_changes": 3,
+          "commits": 78,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 6,
+          "recoveries": 5,
+          "view_changes": 2,
+          "commits": 54,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 5,
+          "recoveries": 3,
+          "view_changes": 3,
+          "commits": 148,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 3,
+          "recoveries": 0,
+          "view_changes": 4,
+          "commits": 637,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        }
+      ],
+      "chaos": {
+        "partitions": 10,
+        "asymmetric_partitions": 0,
+        "crashes": 10,
+        "corruptions": 10,
+        "disk_fault_windows": 9
+      },
+      "network": {
+        "sent": 64070,
+        "delivered": 63860,
+        "dropped": 1095,
+        "partitioned": 1074,
+        "duplicated": 2144,
+        "corrupted": 185,
+        "rejected": 185,
+        "unavailable": 0
+      },
+      "disks": [
+        {
+          "reads": 2124,
+          "writes": 2819,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 2,
+          "crashes": 3,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 2124,
+          "completed_writes": 2818,
+          "erases": 1
+        },
+        {
+          "reads": 2283,
+          "writes": 2981,
+          "read_failures": 13,
+          "torn_writes": 1,
+          "stalls": 33,
+          "crashes": 8,
+          "cancelled": 3,
+          "corruptions": 5,
+          "completed_reads": 2270,
+          "completed_writes": 2977,
+          "erases": 6
+        },
+        {
+          "reads": 1925,
+          "writes": 2975,
+          "read_failures": 19,
+          "torn_writes": 2,
+          "stalls": 32,
+          "crashes": 6,
+          "cancelled": 2,
+          "corruptions": 3,
+          "completed_reads": 1906,
+          "completed_writes": 2971,
+          "erases": 5
+        },
+        {
+          "reads": 1899,
+          "writes": 2552,
+          "read_failures": 0,
+          "torn_writes": 1,
+          "stalls": 1,
+          "crashes": 5,
+          "cancelled": 2,
+          "corruptions": 1,
+          "completed_reads": 1899,
+          "completed_writes": 2549,
+          "erases": 3
+        },
+        {
+          "reads": 1136,
+          "writes": 2081,
+          "read_failures": 0,
+          "torn_writes": 1,
+          "stalls": 1,
+          "crashes": 3,
+          "cancelled": 1,
+          "corruptions": 0,
+          "completed_reads": 1136,
+          "completed_writes": 2079,
+          "erases": 0
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "chaos_ticks": 10000,
+      "total_ticks": 13500,
+      "transactions": 1032,
+      "commit_index": 1032,
+      "invariant_checks": 13501,
+      "storage_comparisons": 34163,
+      "durability_checks": 13463,
+      "liveness_windows": 11,
+      "sstable_digest": "0f726f3ff12705ed5b28931d3fff6cf8212edf7997d6c13015b9f566d2cc75d6",
+      "views": [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "replicas": [
+        {
+          "crashes": 5,
+          "recoveries": 3,
+          "view_changes": 5,
+          "commits": 674,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 8,
+          "recoveries": 6,
+          "view_changes": 4,
+          "commits": 8,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 4,
+          "recoveries": 2,
+          "view_changes": 4,
+          "commits": 247,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 3,
+          "recoveries": 3,
+          "view_changes": 3,
+          "commits": 66,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 3,
+          "recoveries": 3,
+          "view_changes": 3,
+          "commits": 0,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        }
+      ],
+      "chaos": {
+        "partitions": 10,
+        "asymmetric_partitions": 4,
+        "crashes": 9,
+        "corruptions": 10,
+        "disk_fault_windows": 9
+      },
+      "network": {
+        "sent": 54042,
+        "delivered": 53411,
+        "dropped": 981,
+        "partitioned": 1284,
+        "duplicated": 1794,
+        "corrupted": 160,
+        "rejected": 160,
+        "unavailable": 0
+      },
+      "disks": [
+        {
+          "reads": 1492,
+          "writes": 2229,
+          "read_failures": 13,
+          "torn_writes": 1,
+          "stalls": 31,
+          "crashes": 5,
+          "cancelled": 3,
+          "corruptions": 1,
+          "completed_reads": 1479,
+          "completed_writes": 2225,
+          "erases": 3
+        },
+        {
+          "reads": 1894,
+          "writes": 2624,
+          "read_failures": 26,
+          "torn_writes": 2,
+          "stalls": 65,
+          "crashes": 8,
+          "cancelled": 4,
+          "corruptions": 4,
+          "completed_reads": 1868,
+          "completed_writes": 2618,
+          "erases": 6
+        },
+        {
+          "reads": 1418,
+          "writes": 2804,
+          "read_failures": 6,
+          "torn_writes": 1,
+          "stalls": 13,
+          "crashes": 4,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 1412,
+          "completed_writes": 2802,
+          "erases": 2
+        },
+        {
+          "reads": 1773,
+          "writes": 2504,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 1,
+          "crashes": 3,
+          "cancelled": 2,
+          "corruptions": 2,
+          "completed_reads": 1773,
+          "completed_writes": 2502,
+          "erases": 3
+        },
+        {
+          "reads": 1440,
+          "writes": 2552,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 2,
+          "crashes": 3,
+          "cancelled": 3,
+          "corruptions": 2,
+          "completed_reads": 1440,
+          "completed_writes": 2549,
+          "erases": 3
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "chaos_ticks": 10000,
+      "total_ticks": 13500,
+      "transactions": 1045,
+      "commit_index": 1045,
+      "invariant_checks": 13501,
+      "storage_comparisons": 34455,
+      "durability_checks": 13461,
+      "liveness_windows": 11,
+      "sstable_digest": "fdf6798072b6dad0dbf07e4a618edc2acd2fa48cd3b6246259de06c447051f1b",
+      "views": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "replicas": [
+        {
+          "crashes": 3,
+          "recoveries": 3,
+          "view_changes": 2,
+          "commits": 373,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 9,
+          "recoveries": 4,
+          "view_changes": 2,
+          "commits": 18,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 1,
+          "recoveries": 0,
+          "view_changes": 3,
+          "commits": 358,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 6,
+          "recoveries": 6,
+          "view_changes": 3,
+          "commits": 261,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 5,
+          "recoveries": 3,
+          "view_changes": 3,
+          "commits": 0,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        }
+      ],
+      "chaos": {
+        "partitions": 10,
+        "asymmetric_partitions": 7,
+        "crashes": 9,
+        "corruptions": 9,
+        "disk_fault_windows": 8
+      },
+      "network": {
+        "sent": 66920,
+        "delivered": 67034,
+        "dropped": 1310,
+        "partitioned": 923,
+        "duplicated": 2586,
+        "corrupted": 227,
+        "rejected": 227,
+        "unavailable": 0
+      },
+      "disks": [
+        {
+          "reads": 1307,
+          "writes": 3018,
+          "read_failures": 31,
+          "torn_writes": 2,
+          "stalls": 76,
+          "crashes": 3,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 1276,
+          "completed_writes": 3015,
+          "erases": 3
+        },
+        {
+          "reads": 3875,
+          "writes": 2808,
+          "read_failures": 8,
+          "torn_writes": 1,
+          "stalls": 18,
+          "crashes": 9,
+          "cancelled": 4,
+          "corruptions": 2,
+          "completed_reads": 3867,
+          "completed_writes": 2803,
+          "erases": 4
+        },
+        {
+          "reads": 1618,
+          "writes": 2627,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 0,
+          "crashes": 1,
+          "cancelled": 0,
+          "corruptions": 0,
+          "completed_reads": 1618,
+          "completed_writes": 2627,
+          "erases": 0
+        },
+        {
+          "reads": 1974,
+          "writes": 2775,
+          "read_failures": 4,
+          "torn_writes": 1,
+          "stalls": 7,
+          "crashes": 6,
+          "cancelled": 4,
+          "corruptions": 4,
+          "completed_reads": 1970,
+          "completed_writes": 2770,
+          "erases": 6
+        },
+        {
+          "reads": 2220,
+          "writes": 2674,
+          "read_failures": 15,
+          "torn_writes": 2,
+          "stalls": 43,
+          "crashes": 5,
+          "cancelled": 0,
+          "corruptions": 2,
+          "completed_reads": 2205,
+          "completed_writes": 2672,
+          "erases": 3
+        }
+      ]
+    },
+    {
+      "seed": 5,
+      "chaos_ticks": 10000,
+      "total_ticks": 13500,
+      "transactions": 1020,
+      "commit_index": 1020,
+      "invariant_checks": 13501,
+      "storage_comparisons": 33897,
+      "durability_checks": 13464,
+      "liveness_windows": 11,
+      "sstable_digest": "f87b08becfedb4eeb94cd8ed834f70fdef14d63ea9b4abca571f6db0998c6c94",
+      "views": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "replicas": [
+        {
+          "crashes": 5,
+          "recoveries": 5,
+          "view_changes": 2,
+          "commits": 71,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 5,
+          "recoveries": 3,
+          "view_changes": 3,
+          "commits": 474,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 7,
+          "recoveries": 3,
+          "view_changes": 2,
+          "commits": 147,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 5,
+          "recoveries": 3,
+          "view_changes": 4,
+          "commits": 3,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        },
+        {
+          "crashes": 4,
+          "recoveries": 4,
+          "view_changes": 4,
+          "commits": 291,
+          "invalid_messages": 0,
+          "queue_drops": 0
+        }
+      ],
+      "chaos": {
+        "partitions": 10,
+        "asymmetric_partitions": 7,
+        "crashes": 10,
+        "corruptions": 9,
+        "disk_fault_windows": 8
+      },
+      "network": {
+        "sent": 59087,
+        "delivered": 58889,
+        "dropped": 1156,
+        "partitioned": 1063,
+        "duplicated": 2234,
+        "corrupted": 201,
+        "rejected": 201,
+        "unavailable": 0
+      },
+      "disks": [
+        {
+          "reads": 1407,
+          "writes": 2837,
+          "read_failures": 60,
+          "torn_writes": 3,
+          "stalls": 117,
+          "crashes": 5,
+          "cancelled": 1,
+          "corruptions": 1,
+          "completed_reads": 1347,
+          "completed_writes": 2833,
+          "erases": 5
+        },
+        {
+          "reads": 1509,
+          "writes": 2440,
+          "read_failures": 7,
+          "torn_writes": 1,
+          "stalls": 21,
+          "crashes": 5,
+          "cancelled": 1,
+          "corruptions": 2,
+          "completed_reads": 1502,
+          "completed_writes": 2438,
+          "erases": 3
+        },
+        {
+          "reads": 3320,
+          "writes": 2609,
+          "read_failures": 17,
+          "torn_writes": 2,
+          "stalls": 29,
+          "crashes": 7,
+          "cancelled": 4,
+          "corruptions": 1,
+          "completed_reads": 3303,
+          "completed_writes": 2603,
+          "erases": 3
+        },
+        {
+          "reads": 1284,
+          "writes": 2512,
+          "read_failures": 0,
+          "torn_writes": 0,
+          "stalls": 0,
+          "crashes": 5,
+          "cancelled": 3,
+          "corruptions": 2,
+          "completed_reads": 1284,
+          "completed_writes": 2509,
+          "erases": 3
+        },
+        {
+          "reads": 1979,
+          "writes": 2799,
+          "read_failures": 26,
+          "torn_writes": 1,
+          "stalls": 43,
+          "crashes": 4,
+          "cancelled": 1,
+          "corruptions": 3,
+          "completed_reads": 1953,
+          "completed_writes": 2797,
+          "erases": 4
+        }
+      ]
+    }
+  ]
+}

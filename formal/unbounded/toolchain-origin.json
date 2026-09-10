@@ -1,0 +1,6 @@
+{
+  "lean_version": "4.19.0",
+  "release": "https://github.com/leanprover/lean4/releases/tag/v4.19.0",
+  "archive": "lean-4.19.0-darwin_aarch64.tar.zst",
+  "sha256": "94d4246fd90a152a4819419498d3e45c941a31638a57a0a8e32561494ab6cea7"
+}

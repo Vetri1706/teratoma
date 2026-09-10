@@ -1,0 +1,9 @@
+name = "aegis_safety"
+version = "0.1.0"
+defaultTargets = ["Aegis"]
+
+[[lean_lib]]
+name = "Aegis"
+
+[leanOptions]
+warningAsError = true

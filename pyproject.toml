@@ -1,0 +1,10 @@
+[project]
+name = "aegisdb"
+version = "0.1.0"
+description = "Deterministic durable VSR transaction engine and simulation laboratory"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.aegisdb]
+verification = "python3 -m unittest discover -v"
+simulation = "python3 -m src.main --seeds 1 2 3 4 5 --ticks 10000"
