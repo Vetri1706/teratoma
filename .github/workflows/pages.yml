@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    name: Publish interactive lab
+  build:
+    name: Prepare verified lab
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
@@ -24,11 +24,11 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      pages: read
+    outputs:
+      latest: ${{ steps.current.outputs.latest }}
+      artifact_name: ${{ steps.artifact.outputs.name }}
+      artifact_id: ${{ steps.upload.outputs.artifact_id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -47,12 +47,96 @@ jobs:
       - name: Configure Pages
         if: steps.current.outputs.latest == 'true'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Name this upload attempt
+        if: steps.current.outputs.latest == 'true'
+        id: artifact
+        run: echo "name=github-pages-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
       - name: Package static lab
         if: steps.current.outputs.latest == 'true'
+        id: upload
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
+          name: ${{ steps.artifact.outputs.name }}
           path: docs/lab
+
+  # Complete the upload job before requesting artifact metadata. Consecutive
+  # upload/deploy steps can race artifact visibility (actions/deploy-pages#451).
+  deploy:
+    name: Publish interactive lab
+    needs: build
+    if: needs.build.outputs.latest == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Wait for the exact uploaded artifact
+        id: ready
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PAGES_ARTIFACT: ${{ needs.build.outputs.artifact_name }}
+          PAGES_ARTIFACT_ID: ${{ needs.build.outputs.artifact_id }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import time
+          import urllib.parse
+          import urllib.request
+
+          repository = os.environ["GITHUB_REPOSITORY"]
+          name = os.environ["PAGES_ARTIFACT"]
+          expected_id = int(os.environ["PAGES_ARTIFACT_ID"])
+          base = os.environ["GITHUB_API_URL"] + "/repos/" + repository
+
+          def get(path):
+              request = urllib.request.Request(base + path, headers={
+                  "Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              })
+              # Authentication, rate-limit, and other API errors fail immediately.
+              with urllib.request.urlopen(request, timeout=10) as response:
+                  return json.load(response)
+
+          query = urllib.parse.urlencode({"name": name, "per_page": 100})
+          path = "/actions/runs/" + os.environ["GITHUB_RUN_ID"] + "/artifacts?" + query
+          deadline = time.monotonic() + 60
+          while True:
+              artifacts = get(path)["artifacts"]
+              matches = [artifact for artifact in artifacts if artifact["name"] == name]
+              if len(matches) > 1:
+                  raise SystemExit("Ambiguous Pages artifacts; refusing to deploy")
+              if matches:
+                  artifact = matches[0]
+                  if artifact["id"] != expected_id or artifact["expired"]:
+                      raise SystemExit("Pages artifact identity or expiry check failed")
+                  print(f"Verified Pages artifact {expected_id} in this workflow run")
+                  break
+              remaining = deadline - time.monotonic()
+              if remaining <= 0:
+                  raise SystemExit("Pages artifact was not visible within 60 seconds")
+              print("Waiting for uploaded Pages artifact metadata...", flush=True)
+              time.sleep(min(5, remaining))
+
+          # Recheck after the upload job and visibility wait, before publication.
+          current = get("/git/ref/heads/main")["object"]["sha"]
+          if current == os.environ["VERIFIED_SHA"]:
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                  output.write("latest=true\n")
+          else:
+              print("A newer main commit exists; skipping this older deployment")
+          PY
       - name: Deploy lab
-        if: steps.current.outputs.latest == 'true'
+        if: steps.ready.outputs.latest == 'true'
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}
