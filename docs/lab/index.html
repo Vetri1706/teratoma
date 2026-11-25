@@ -5,97 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Explore real deterministic AegisDB traces. Replay a primary crash, a network partition, and corrupt-disk recovery across five VSR replicas."
+      content="A distributed-systems workbench for replaying primary crashes, network partitions, and corrupt-WAL recovery. Inspect five VSR replicas using traces from the real Python engine."
     />
-    <meta name="theme-color" content="#163b32" />
-    <title>Teratoma — break things, learn consensus</title>
+    <meta name="theme-color" content="#151719" />
+    <title>Teratoma — distributed systems replay workbench</title>
+    <link rel="canonical" href="https://vetri1706.github.io/teratoma/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Teratoma" />
+    <meta
+      property="og:title"
+      content="Teratoma — inspect a distributed system under failure"
+    />
+    <meta
+      property="og:description"
+      content="Replay crashes, partitions, and recovery across five VSR replicas. Real engine traces, inspectable state, reproducible seeds. Open source under Apache-2.0."
+    />
+    <meta property="og:url" content="https://vetri1706.github.io/teratoma/" />
+    <meta
+      property="og:image"
+      content="https://vetri1706.github.io/teratoma/preview.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="Teratoma replay workbench showing a network partition, timeline, and five replicas' state."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Teratoma — distributed systems replay workbench"
+    />
+    <meta
+      name="twitter:description"
+      content="Inspect what happens when a primary crashes, a network splits, or a replica replays a corrupt WAL. Reproducible engine recordings."
+    />
+    <meta
+      name="twitter:image"
+      content="https://vetri1706.github.io/teratoma/preview.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Teratoma network-partition replay with replica state and timeline."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151719'/%3E%3Cpath d='M8 9h16M16 9v15' fill='none' stroke='%23e8ac57' stroke-width='4'/%3E%3C/svg%3E"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script src="traces.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#lab">Skip to replay controls</a>
-    <header class="site-header wrap">
-      <a class="wordmark" href="#"
-        ><span class="brand-icon" aria-hidden="true">t.</span> teratoma<span
-          class="wordmark-detail"
-          >/ AegisDB</span
-        ></a
-      >
+    <header class="site-header">
+      <a class="wordmark" href="#" aria-label="Teratoma workbench home">
+        <span class="brand-mark" aria-hidden="true">[t]</span>
+        <strong>teratoma</strong>
+        <span class="wordmark-detail">/ AegisDB</span>
+      </a>
       <nav aria-label="Project">
         <a href="https://github.com/Vetri1706/teratoma/blob/main/docs/DEMO.md"
-          >How it works <span aria-hidden="true">↗</span></a
-        ><a class="repo-link" href="https://github.com/Vetri1706/teratoma"
-          >View source <span aria-hidden="true">↗</span></a
+          >Documentation <span aria-hidden="true">↗</span></a
+        >
+        <a href="https://github.com/Vetri1706/teratoma"
+          >GitHub <span aria-hidden="true">↗</span></a
         >
       </nav>
     </header>
-    <main class="wrap">
-      <section class="hero" aria-labelledby="headline">
-        <div>
-          <p class="eyebrow">
-            <span class="dot"></span> A DISTRIBUTED SYSTEMS LAB
-          </p>
-          <h1 id="headline">
-            Break a replica.<br /><span>Watch the cluster recover.</span>
-          </h1>
-          <p class="lede">
-            Five replicas. A quorum of three. One reproducible story.<br />Explore
-            consensus and recovery through traces from the real AegisDB
-            simulation engine.
-          </p>
+
+    <main class="workspace">
+      <div class="workspace-heading">
+        <div class="workspace-title">
+          <h1 id="headline">Consensus workbench</h1>
+          <p>Inspect leader changes, quorum progress, and recovery.</p>
         </div>
-        <aside class="run-card">
-          <span class="tiny-label">RUN IT YOURSELF · PYTHON 3.11+</span
-          ><code>python -m src.demo</code
-          ><button
-            id="copy-command"
-            type="button"
-            aria-label="Copy demo command"
-          >
-            Copy command <span aria-hidden="true">⧉</span>
-          </button>
-          <p>
-            From a checkout. No Python dependencies.<br />Open the generated
-            HTML to replay your run.
-          </p>
-        </aside>
-      </section>
-      <section class="lab" id="lab" aria-labelledby="lab-title">
-        <aside class="scenarios">
-          <div class="section-label">
-            <span>01 / PICK A FAULT</span><span id="scenario-count"></span>
-          </div>
-          <h2 id="lab-title">What could go wrong?</h2>
-          <div
-            id="scenario-list"
-            role="group"
-            aria-label="Replay scenario"
-          ></div>
-          <div class="recording-note">
-            <span class="tiny-label">RECORDED, NOT LIVE</span>
-            <p>
-              The browser replays Python-generated observations. Change the seed
-              in the CLI to generate a different run.
-            </p>
-            <a href="traces.json" download
-              >Download trace JSON <span aria-hidden="true">↓</span></a
-            >
-          </div>
-        </aside>
-        <div class="experiment">
-          <div class="experiment-header">
-            <div>
-              <span class="tiny-label">02 / FOLLOW THE CLUSTER</span>
-              <h2 id="scenario-title">Loading replay…</h2>
+        <span class="recording-badge"
+          ><span aria-hidden="true">●</span> Recorded simulation</span
+        >
+      </div>
+
+      <div id="error" class="error" role="alert" hidden></div>
+      <noscript>
+        <p class="error">
+          This replay needs JavaScript. Inspect
+          <a href="traces.json">the recorded JSON</a> or run
+          <code>python -m src.demo</code> locally.
+        </p>
+      </noscript>
+
+      <div class="workbench" id="lab">
+        <aside class="experiment-rail" aria-labelledby="lab-title">
+          <div class="rail-content">
+            <div class="rail-heading">
+              <h2 id="lab-title">Experiments</h2>
+              <span id="scenario-count" class="small-label"></span>
             </div>
-            <div class="seed-pill" id="seed">SEED —</div>
+            <div
+              id="scenario-list"
+              role="group"
+              aria-label="Replay scenario"
+            ></div>
+            <div class="rail-note">
+              <span class="small-label">Recorded, not live</span>
+              <p>
+                Each experiment is a trace from the Python engine. The browser
+                replays its observations.
+              </p>
+              <a class="text-link" href="traces.json" download
+                >Download trace JSON <span aria-hidden="true">↓</span></a
+              >
+            </div>
+            <div class="reproduction">
+              <h3>Reproduce locally</h3>
+              <p>From a checkout with Python 3.11 or later:</p>
+              <code>python -m src.demo</code>
+              <button
+                id="copy-command"
+                class="secondary-button"
+                type="button"
+                aria-label="Copy demo command"
+              >
+                Copy command <span aria-hidden="true">⧉</span>
+              </button>
+              <p>
+                Change the seed in the CLI to record another run. No third-party
+                Python packages required.
+              </p>
+            </div>
           </div>
-          <p id="question" class="question"></p>
+        </aside>
+
+        <section class="experiment" aria-labelledby="scenario-title">
+          <header class="experiment-header">
+            <div class="experiment-context">
+              <h2 id="scenario-title">Loading replay…</h2>
+              <p id="question" class="question"></p>
+            </div>
+            <div class="experiment-actions">
+              <div class="share-controls">
+                <span id="seed" class="seed-label">SEED —</span>
+                <button
+                  id="copy-link"
+                  class="secondary-button"
+                  type="button"
+                  aria-label="Copy link to this replay"
+                >
+                  Copy link <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              <p
+                id="share-status"
+                class="share-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </div>
+          </header>
+
           <div class="network-panel">
-            <div class="network-heading">
-              <span><span class="dot"></span> DETERMINISTIC REPLAY</span
-              ><span>5 REPLICAS · QUORUM 3</span>
+            <div class="panel-heading">
+              <h3>Cluster topology</h3>
+              <span class="topology-facts"
+                >5 replicas <span aria-hidden="true">/</span> quorum 3</span
+              >
             </div>
             <svg
               id="network"
@@ -105,32 +176,42 @@
             >
               <title id="network-title">Five-replica network</title>
               <desc id="network-description">
-                Network connections and replica states at the selected virtual
-                tick. Detailed values follow below.
+                Configured network links and replica states at the selected
+                virtual tick. Dashed links are blocked. Detailed values are in
+                the replica table.
               </desc>
               <g id="edges"></g>
               <g id="replicas"></g>
               <g class="center-label">
-                <text x="340" y="172" text-anchor="middle">
-                  AGREEMENT TAKES
-                </text>
+                <text x="340" y="172" text-anchor="middle">QUORUM</text>
                 <text
                   x="340"
                   y="208"
                   text-anchor="middle"
                   class="quorum-number"
                 >
-                  3 of 5
+                  3 / 5
                 </text>
-                <text x="340" y="232" text-anchor="middle">A QUORUM</text>
+                <text x="340" y="232" text-anchor="middle">REPLICAS</text>
               </g>
             </svg>
-            <div class="legend">
-              <span><i class="key primary"></i>Local primary</span
-              ><span><i class="key normal"></i>Replica</span
-              ><span><i class="key fault"></i>Stopped / blocked</span>
+            <div class="legend" aria-label="Topology legend">
+              <span
+                ><i class="key primary" aria-hidden="true"></i>Local
+                primary</span
+              >
+              <span><i class="key normal" aria-hidden="true"></i>Replica</span>
+              <span
+                ><i class="key fault" aria-hidden="true"></i>Stopped /
+                blocked</span
+              >
+              <span
+                ><i class="key recovering" aria-hidden="true"></i>Changing view
+                / recovering</span
+              >
             </div>
           </div>
+
           <div class="phase" aria-live="polite" aria-atomic="true">
             <span class="phase-mark" aria-hidden="true">↳</span>
             <div>
@@ -138,156 +219,177 @@
               <p id="phase-detail"></p>
             </div>
           </div>
-          <div class="transport">
-            <button
-              id="play"
-              type="button"
-              class="play-button"
-              aria-label="Play replay"
+
+          <section class="playback" aria-labelledby="playback-title">
+            <div class="transport">
+              <h3 id="playback-title" class="sr-only">Replay controls</h3>
+              <button
+                id="play"
+                type="button"
+                class="play-button"
+                aria-label="Play replay"
+              >
+                ▶ <span>Play replay</span>
+              </button>
+              <div class="step-controls">
+                <button
+                  id="previous"
+                  type="button"
+                  class="step-button"
+                  aria-label="Previous milestone"
+                >
+                  ←
+                </button>
+                <button
+                  id="next"
+                  type="button"
+                  class="step-button"
+                  aria-label="Next milestone"
+                >
+                  →
+                </button>
+              </div>
+              <label class="speed" for="speed"
+                >Speed
+                <select id="speed">
+                  <option value="180">1×</option>
+                  <option value="90" selected>2×</option>
+                  <option value="36">5×</option>
+                </select>
+              </label>
+              <span class="tick-readout"
+                >TICK <strong id="tick">0</strong><span> / 2000</span></span
+              >
+            </div>
+            <label class="sr-only" for="timeline">Virtual tick</label>
+            <input
+              id="timeline"
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+            />
+            <div
+              id="milestones"
+              class="milestones"
+              role="group"
+              aria-label="Jump to a milestone"
+            ></div>
+          </section>
+
+          <section class="node-details" aria-labelledby="replica-state-title">
+            <div class="panel-heading">
+              <h3 id="replica-state-title">Replica state</h3>
+              <span class="small-label">Selected frame</span>
+            </div>
+            <div
+              class="table-scroll"
+              tabindex="0"
+              role="region"
+              aria-label="Replica state table"
             >
-              ▶ <span>Play replay</span></button
-            ><button
-              id="previous"
-              type="button"
-              class="step-button"
-              aria-label="Previous milestone"
-            >
-              ←</button
-            ><button
-              id="next"
-              type="button"
-              class="step-button"
-              aria-label="Next milestone"
-            >
-              →</button
-            ><label class="speed"
-              >Speed
-              <select id="speed">
-                <option value="180">1×</option>
-                <option value="90" selected>2×</option>
-                <option value="36">5×</option>
-              </select></label
-            ><span class="tick-readout"
-              >TICK <strong id="tick">0</strong><span> / 2000</span></span
-            >
+              <table>
+                <caption class="sr-only">
+                  Replica state at the selected virtual tick
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Node</th>
+                    <th scope="col">State</th>
+                    <th scope="col">View</th>
+                    <th scope="col">Commit</th>
+                    <th scope="col">Log entries</th>
+                    <th scope="col">Recoveries</th>
+                    <th scope="col">Storage digest</th>
+                  </tr>
+                </thead>
+                <tbody id="node-table"></tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              A primary belongs to its local view. During a partition, replicas
+              can report different primaries. Compare storage digests at equal
+              commit indices.
+            </p>
+          </section>
+        </section>
+
+        <aside class="inspector" aria-labelledby="inspector-title">
+          <div class="inspector-content">
+            <div class="inspector-heading">
+              <h2 id="inspector-title">Inspector</h2>
+              <span class="small-label">Selected frame</span>
+            </div>
+            <div class="metrics" aria-label="Observed state">
+              <div class="metric">
+                <span>Completed transactions</span>
+                <strong id="completed">—</strong>
+                <p>Client replies checked against an independent reference.</p>
+              </div>
+              <div class="metric">
+                <span>Invariant checks</span>
+                <strong id="checks">—</strong>
+                <p>
+                  Checked at every virtual tick, not just the displayed frames.
+                </p>
+              </div>
+              <div class="metric">
+                <span>Pending requests</span>
+                <strong id="pending">—</strong>
+                <p>Each client has at most one request in flight.</p>
+              </div>
+            </div>
+            <section class="recording-result" aria-labelledby="result-heading">
+              <h3 id="result-heading">Full recording result</h3>
+              <strong id="result">—</strong>
+              <p id="result-detail"></p>
+            </section>
+            <section class="scope-note" aria-labelledby="scope-title">
+              <h3 id="scope-title">What you are looking at</h3>
+              <p>
+                Virtual time, disks, and networking. Samples are 20 ticks apart;
+                short transitions can happen between frames.
+              </p>
+              <p>
+                This is finite test evidence, not a proof or a real-world
+                throughput benchmark.
+              </p>
+            </section>
           </div>
-          <label class="sr-only" for="timeline">Virtual tick</label
-          ><input
-            id="timeline"
-            type="range"
-            min="0"
-            max="100"
-            value="0"
-            step="1"
-          />
-          <div
-            id="milestones"
-            class="milestones"
-            role="group"
-            aria-label="Jump to a milestone"
-          ></div>
-        </div>
-      </section>
-      <section class="results" aria-label="Observed state">
-        <div class="metric">
-          <span>COMPLETED TRANSACTIONS</span><strong id="completed">—</strong>
-          <p>Client replies checked against a reference.</p>
-        </div>
-        <div class="metric">
-          <span>INVARIANT CHECKS</span><strong id="checks">—</strong>
-          <p>Checked at every virtual tick, not every frame.</p>
-        </div>
-        <div class="metric">
-          <span>PENDING REQUESTS</span><strong id="pending">—</strong>
-          <p>Each client has at most one in flight.</p>
-        </div>
-        <div class="metric final-result">
-          <span>FULL RECORDING RESULT</span><strong id="result">—</strong>
-          <p id="result-detail"></p>
-        </div>
-      </section>
-      <details class="node-details">
-        <summary>
-          Inspect replica state
-          <span>view · commit · log · storage digest</span>
-        </summary>
-        <div class="table-scroll">
-          <table>
-            <caption class="sr-only">
-              Replica state at the selected virtual tick
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Node</th>
-                <th scope="col">State</th>
-                <th scope="col">View</th>
-                <th scope="col">Commit</th>
-                <th scope="col">Log entries</th>
-                <th scope="col">Recoveries</th>
-                <th scope="col">Storage digest</th>
-              </tr>
-            </thead>
-            <tbody id="node-table"></tbody>
-          </table>
-        </div>
-        <p>
-          A primary is local to a replica's view. During a partition, different
-          views can temporarily report different primaries. A matching digest is
-          meaningful alongside the commit index.
-        </p>
-      </details>
-      <section class="explainer">
+        </aside>
+      </div>
+
+      <section class="reference-strip" aria-labelledby="reference-title">
         <div>
-          <span class="eyebrow"
-            >SMALL ENOUGH TO READ. REAL ENOUGH TO BREAK.</span
-          >
-          <h2>Open the hood.</h2>
+          <h2 id="reference-title">Read the system</h2>
           <p>
-            The same VSR state machine powers the simulator and the experimental
-            POSIX daemon. This replay uses virtual time, virtual disks, and
-            virtual networking. It does not measure real-world latency or
-            throughput.
+            The simulator and experimental POSIX daemon share the VSR state
+            machine.
           </p>
         </div>
-        <div class="reading-links">
+        <nav aria-label="Technical references">
           <a href="https://github.com/Vetri1706/teratoma/blob/main/docs/DEMO.md"
-            ><span>01</span>
-            <div>
-              <strong>Reproduce this experiment</strong>
-              <p>Generate a trace, choose a seed, inspect the data.</p>
-            </div>
-            <span aria-hidden="true">↗</span></a
-          ><a
-            href="https://github.com/Vetri1706/teratoma/blob/main/docs/FAULT_MODEL.md"
-            ><span>02</span>
-            <div>
-              <strong>Understand the boundaries</strong>
-              <p>Fault assumptions, trusted peers, and storage limits.</p>
-            </div>
-            <span aria-hidden="true">↗</span></a
-          ><a href="https://github.com/Vetri1706/teratoma/tree/main/formal"
-            ><span>03</span>
-            <div>
-              <strong>Read the protocol proofs</strong>
-              <p>Separate Lean models; finite traces are not proofs.</p>
-            </div>
-            <span aria-hidden="true">↗</span></a
+            >Reproduce the experiment <span aria-hidden="true">↗</span></a
           >
-        </div>
+          <a
+            href="https://github.com/Vetri1706/teratoma/blob/main/docs/FAULT_MODEL.md"
+            >Operating boundaries <span aria-hidden="true">↗</span></a
+          >
+          <a href="https://github.com/Vetri1706/teratoma/tree/main/formal"
+            >Protocol models &amp; proofs <span aria-hidden="true">↗</span></a
+          >
+        </nav>
       </section>
-      <div id="error" class="error" role="alert" hidden></div>
-      <noscript
-        ><p class="error">
-          This replay needs JavaScript. You can still inspect
-          <a href="traces.json">the recorded JSON</a> or run
-          <code>python -m src.demo</code> locally.
-        </p></noscript
-      >
     </main>
-    <footer class="wrap">
-      <span>TERATOMA / AEGISDB · EXPERIMENTAL · APACHE-2.0</span
-      ><a href="https://github.com/Vetri1706/teratoma"
-        >Useful to you? Follow the project on GitHub ↗</a
+
+    <footer class="site-footer">
+      <span
+        >TERATOMA / AEGISDB <span aria-hidden="true">·</span> EXPERIMENTAL
+        <span aria-hidden="true">·</span> APACHE-2.0</span
+      >
+      <a href="https://github.com/Vetri1706/teratoma"
+        >Follow the project on GitHub <span aria-hidden="true">↗</span></a
       >
     </footer>
   </body>
