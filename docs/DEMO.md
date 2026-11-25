@@ -56,10 +56,16 @@ describes the **full recording**, while the other counters describe the selected
 frame. A replica's primary designation belongs to its local view; during a
 partition different views can temporarily name different primaries.
 
-Use Play/Pause, the timeline, or the milestone buttons. Expand **Inspect replica
-state** for exact view, commit index, log size, recovery count, and storage digest.
+Use Play/Pause, the timeline, or the milestone buttons. The replica table shows
+exact view, commit index, log size, recovery count, and storage digest.
 All controls work with the keyboard. Playback is opt-in and pauses when its tab
 is hidden.
+
+**Copy replay link** captures the selected scenario and virtual tick. For example,
+[this partition at tick 980](https://vetri1706.github.io/teratoma/#scenario=partition&tick=980)
+shows the majority making progress while two replicas remain isolated. Opening
+the link restores that frame. A link to localhost works only on that computer;
+for reports opened directly from disk, share the generated report folder instead.
 
 ## What this verifies
 

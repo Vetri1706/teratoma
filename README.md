@@ -1,6 +1,6 @@
 # Teratoma / AegisDB
 
-**Break a replica. Watch the cluster recover.**
+**Replay replication failures. Inspect what each replica did.**
 
 [![Verification](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml/badge.svg)](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml)
 
@@ -15,7 +15,7 @@ protocol-safety development.
 
 [![The replay lab showing a real recorded network partition](docs/assets/replay-lab.jpg)](https://vetri1706.github.io/teratoma/)
 
-**[Open the replay lab](https://vetri1706.github.io/teratoma/)** · [Run it locally](docs/DEMO.md) · [Read the fault model](docs/FAULT_MODEL.md) · [Contribute](CONTRIBUTING.md)
+**[Open the replay workbench](https://vetri1706.github.io/teratoma/)** · [Inspect a partition at tick 980](https://vetri1706.github.io/teratoma/#scenario=partition&tick=980) · [Run it locally](docs/DEMO.md) · [Contribute](CONTRIBUTING.md)
 
 This is a research prototype for isolated local experiments. The native adapter
 is not production-qualified; read the [operating contract](docs/FAULT_MODEL.md)

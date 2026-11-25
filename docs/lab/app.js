@@ -33,6 +33,32 @@
   let timer = null;
   let lastPhase = "";
   const scenarioButtons = [];
+  function replayHash() {
+    return `#${new URLSearchParams({
+      scenario: scenarios[selected].id,
+      tick: String(scenarios[selected].frames[frameIndex].tick),
+    })}`;
+  }
+  function updateAddress() {
+    // A local HTML report still works when the browser disallows history edits.
+    try {
+      window.history.replaceState(null, "", replayHash());
+    } catch {}
+    $("share-status").textContent = "";
+  }
+  function restoreAddress() {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    if (!params.has("scenario")) return false;
+    const index = scenarios.findIndex(
+      (item) => item.id === params.get("scenario"),
+    );
+    if (index < 0) return false;
+    const rawTick = params.get("tick") || "0";
+    const tick = /^\d+$/.test(rawTick) ? Number(rawTick) : 0;
+    choose(index);
+    seek(Number.isSafeInteger(tick) ? tick : 0);
+    return true;
+  }
   const svg = (name, attrs, text) => {
     const element = document.createElementNS(NS, name);
     for (const [key, value] of Object.entries(attrs))
@@ -165,6 +191,7 @@
     );
     if (frameIndex < 0) frameIndex = scenarios[selected].frames.length - 1;
     render();
+    updateAddress();
   }
   function choose(index) {
     pause();
@@ -192,6 +219,7 @@
       $("milestones").append(button);
     });
     render();
+    updateAddress();
   }
   scenarios.forEach((scenario, index) => {
     const button = document.createElement("button");
@@ -221,14 +249,21 @@
       () => {
         frameIndex += 1;
         render();
-        if (frameIndex >= scenarios[selected].frames.length - 1) pause();
+        if (frameIndex >= scenarios[selected].frames.length - 1) {
+          pause();
+          updateAddress();
+        }
       },
       Number($("speed").value),
     );
   }
-  $("play").addEventListener("click", () =>
-    timer === null ? play() : pause(),
-  );
+  $("play").addEventListener("click", () => {
+    if (timer === null) play();
+    else {
+      pause();
+      updateAddress();
+    }
+  });
   $("speed").addEventListener("change", () => {
     if (timer !== null) {
       pause();
@@ -239,6 +274,7 @@
     pause();
     frameIndex = Number(event.target.value);
     render();
+    updateAddress();
   });
   $("previous").addEventListener("click", () => {
     const frame = scenarios[selected].frames[frameIndex];
@@ -257,6 +293,28 @@
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) pause();
   });
+  window.addEventListener("hashchange", restoreAddress);
+  $("copy-link").addEventListener("click", async () => {
+    if (window.location.protocol === "file:") {
+      $("share-status").textContent =
+        "This is a local report. Share its folder to share this recording.";
+      return;
+    }
+    pause();
+    updateAddress();
+    const link = new URL(window.location.href);
+    link.hash = replayHash();
+    try {
+      await navigator.clipboard.writeText(link.href);
+      const local = ["localhost", "127.0.0.1", "[::1]"].includes(link.hostname);
+      $("share-status").textContent = local
+        ? "Copied. This preview link only works on this computer."
+        : "Copied link to this scenario and tick.";
+    } catch {
+      $("share-status").textContent =
+        "Copy the link from your browser address bar.";
+    }
+  });
   $("copy-command").addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText("python -m src.demo");
@@ -265,5 +323,5 @@
       $("copy-command").textContent = "Select and copy the command above";
     }
   });
-  choose(selected);
+  if (!restoreAddress()) choose(selected);
 })();
