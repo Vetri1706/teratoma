@@ -1,11 +1,53 @@
-# Native runtime verification
+# Runtime verification
 
-The subsequent [Lean unbounded safety proof](UNBOUNDED_VERIFICATION.md) is verified separately. The finite-model results below remain the original executed evidence.
+## Reproducible CI — November 25, 2026
 
-Executed on 7 September 2026 on macOS arm64 with CPython 3.14.6 and Apple Clang 21.
+[Verification run 45654514889](https://github.com/Vetri1706/teratoma/actions/runs/45654514889)
+passed for commit `472e0d0e3304ae31f5495f9a9bd5e7192513083a`:
 
-**61 tests passed. The five-process, 5,000-request chaos test passed in
-151.961 seconds. The exhaustive three-view formal model passed.**
+| Check | Result |
+| --- | --- |
+| Portable Windows and Linux, Python 3.11 and 3.13 | 69 tests passed in each matrix job |
+| Linux native full suite, Python 3.13 | 81 tests passed |
+| Normal, ASan/UBSan, and TSan queue stress | Each verified 400,000 messages; no sanitizer unavailable skip |
+| Five-process OS chaos | 512 requests passed, including process kills, partitions, primary failover, and SSTable corruption |
+| Deterministic simulations and replay generation | Three fault seeds and all four demo scenarios passed |
+| Lean 4.19.0 | Clean build and kernel audit passed |
+
+The run uploads native, simulation, and Lean evidence as GitHub Actions artifacts
+with a 14-day retention period. The workflow and source remain available to
+reproduce the checks after artifacts expire. These finite tests do not certify
+production readiness or show that the executable refines the formal model.
+Inspect the [latest runs](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml)
+for later revisions.
+
+## Archived original native experiment
+
+This is an archival report of the original experiment, not a fresh result for
+the current checkout. The original raw logs, process histories, disk images,
+source manifest, and evidence archive were stored under `artifacts/`, which is
+ignored and is not included in this repository. Those claims cannot be
+independently reconstructed from this document alone.
+
+The checked-in [native build report](../native/build_report.json) records its
+original build commands and sanitizer results. The separate
+[simulation report](../verification.json) contains older virtual-runtime results.
+Neither replaces the missing native chaos history.
+
+To produce current evidence, follow [the native guide](NATIVE.md) and inspect
+[GitHub Actions](https://github.com/Vetri1706/teratoma/actions) for the exact tested
+revision and job scope. A successful current check does not retroactively verify
+the archived numbers below.
+
+The subsequent [Lean unbounded safety report](UNBOUNDED_VERIFICATION.md) describes
+a separate proof build. The finite-model numbers below are the original reported
+results.
+
+The original report records execution on 7 September 2026 on macOS arm64 with
+CPython 3.14.6 and Apple Clang 21.
+
+**Reported result: 61 tests passed. The five-process, 5,000-request chaos test
+passed in 151.961 seconds. The exhaustive three-view formal model passed.**
 
 | Verification | Executed result |
 | --- | --- |
@@ -67,25 +109,31 @@ the corresponding model; the executed checker is the standalone Python state
 explorer. Java/TLC was not available, so no TLC execution is claimed.
 See [formal assumptions and correspondence](../formal/README.md).
 
-## Complete evidence
+## Original evidence locations
 
-- [Complete terminal log, including all daemon outputs](../artifacts/complete-terminal.log)
-- [Every PID and process exit status](../artifacts/process-exit-statuses.json)
-- [Chaos report](../artifacts/os-chaos-final/report.json)
-- [All 5,000 invocation/response records](../artifacts/os-chaos-final/client-history.jsonl)
-- [Three-view formal output](../artifacts/checks-final/model-3views.json)
-- [Negative-control counterexample](../artifacts/checks-final/model-mutation.json)
-- [All test results](../artifacts/checks-final/unit-tests.log)
-- [Native compilation and sanitizer outputs](../native/build_report.json)
-- [Actual disk files and checksums](../artifacts/disk-evidence.json)
-- [Source and binary fingerprints](../artifacts/source-manifest.json)
-- [Portable evidence archive](../artifacts/aegisdb-verification.zip)
+The following are the original local paths, not downloadable repository files:
+
+| Original evidence | Original path (not included) |
+| --- | --- |
+| Terminal log and daemon output | `artifacts/complete-terminal.log` |
+| PIDs and process exit statuses | `artifacts/process-exit-statuses.json` |
+| Chaos report | `artifacts/os-chaos-final/report.json` |
+| Invocation/response history | `artifacts/os-chaos-final/client-history.jsonl` |
+| Three-view model result | `artifacts/checks-final/model-3views.json` |
+| Mutation counterexample | `artifacts/checks-final/model-mutation.json` |
+| Unit-test output | `artifacts/checks-final/unit-tests.log` |
+| Disk checksums | `artifacts/disk-evidence.json` |
+| Source and binary fingerprints | `artifacts/source-manifest.json` |
+| Evidence archive | `artifacts/aegisdb-verification.zip` |
+
+The [native compilation report](../native/build_report.json) is included, but its
+absolute paths describe the original machine.
 
 An earlier diagnostic run discovered SIGPIPE termination when peers disconnected.
 Signal handling was fixed. A later exploratory run was intentionally interrupted
-to replace excessive small-packet snapshot traffic with paced streams. Their
-original logs remain in artifacts/os-chaos-debug-1 and artifacts/os-chaos-5000-1;
-they are not counted as passing verification.
+to replace excessive small-packet snapshot traffic with paced streams. Their original logs were recorded at
+`artifacts/os-chaos-debug-1` and `artifacts/os-chaos-5000-1`; those paths are not
+included in this clone. Neither run is counted as passing verification.
 
 The production runtime uses actual sockets, OS threads, fsync WAL and separately
 persisted SSTables. Its resource and trust assumptions are documented in

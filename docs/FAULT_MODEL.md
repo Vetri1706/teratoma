@@ -1,7 +1,8 @@
 # Operating and verification contract
 
-The production runtime uses real TCP sockets, OS threads and filesystem storage.
-The virtual OS is retained only for deterministic tests.
+The experimental native adapter under `src/production/` uses real TCP sockets,
+OS threads, and filesystem storage. Its directory name does not certify
+production readiness. The virtual OS supports deterministic tests and replay.
 
 ## Runtime assumptions
 
@@ -51,8 +52,12 @@ directly; it replays only post-checkpoint WAL records.
 Logical transport messages are bounded at 64 MiB; physical continuation payloads
 are 256 KiB. Per-worker unsent data is bounded at 256 MiB with a 1 MiB write
 window. Protocol retransmission handles dropped sends. The retained consensus
-log has a 48 MiB admission bound so state transfer and elections remain
-representable. History-prefix pruning and dynamic membership are not implemented.
+log has a 48 MiB admission bound on log entries. That limit does not include
+retained client results or serialized checkpoints, which can grow much larger
+than the log, especially with repeated reads of large values. It provides no
+total-memory bound or guarantee that complete state-transfer payloads remain
+representable. History and deduplication-result pruning are not implemented;
+neither is dynamic membership. These are experiments, not a scalability claim.
 
 The C queue's push/pop operations are lock-free; Python allocation, reference
 ownership, serialization and consensus are not claimed to be lock-free.

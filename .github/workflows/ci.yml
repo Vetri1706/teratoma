@@ -1,0 +1,124 @@
+name: Verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verification-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONUTF8: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  portable:
+    name: Portable / ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Portable unit tests
+        run: python -B scripts/test_portable.py
+
+  native:
+    name: Linux native, persistence, and OS chaos
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CC: clang
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Build native daemon and stress queues with sanitizers
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          python -B scripts/build_native.py --sanitizers 2>&1 | tee artifacts/native-build.log
+      - name: Complete unit suite and bounded model checks
+        run: python -B scripts/verify_production.py --output artifacts/verification
+      - name: Five-process durability and fault recovery
+        run: >-
+          python -B scripts/run_os_chaos.py
+          --requests 512 --clients 4 --client-delay 0.1 --timeout 300
+          --output artifacts/os-chaos
+      - name: Preserve verification logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: linux-native-evidence
+          retention-days: 14
+          path: |
+            artifacts/**/*.log
+            artifacts/**/*.json
+            artifacts/**/*.jsonl
+            native/build_report.json
+
+  simulation:
+    name: Deterministic fault simulations
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+      - name: Verify three reproducible fault schedules
+        run: |
+          mkdir -p artifacts
+          python -B -m src.main --seeds 1 2 3 --ticks 1000 --recovery-ticks 250 --report artifacts/simulation.json --failure-trace artifacts/failure-trace.json
+      - name: Generate the replayable demo
+        run: python -B -m src.demo --output artifacts/demo
+      - name: Preserve simulation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: deterministic-evidence
+          path: artifacts/
+          retention-days: 14
+
+  lean:
+    name: Lean 4.19.0 kernel audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+      - name: Install pinned Lean toolchain in runner temporary storage
+        working-directory: ${{ runner.temp }}
+        env:
+          ELAN_HOME: ${{ runner.temp }}/elan
+        run: |
+          curl --fail --location --retry 3 --output elan.tar.gz https://github.com/leanprover/elan/releases/download/v4.4.0/elan-x86_64-unknown-linux-gnu.tar.gz
+          echo '0e8250aa2be86c7af929ade68db617af9edc8b9ccf6eaf5ece228250d0d032e2  elan.tar.gz' | sha256sum --check
+          tar -xzf elan.tar.gz
+          ./elan-init -y --no-modify-path --default-toolchain leanprover/lean4:v4.19.0
+          echo "$ELAN_HOME/bin" >> "$GITHUB_PATH"
+          echo "ELAN_HOME=$ELAN_HOME" >> "$GITHUB_ENV"
+      - name: Clean build and audit all declared theorem dependencies
+        run: python -B scripts/verify_unbounded.py --output artifacts/unbounded
+      - name: Preserve kernel audit evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lean-kernel-audit
+          path: artifacts/unbounded/
+          retention-days: 14

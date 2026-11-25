@@ -1,0 +1,24 @@
+name: Experiment or improvement
+description: Propose a concrete experiment, explanation, or design improvement.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or question
+      description: What are you trying to understand or accomplish, and what prevents it now?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: State the scope and any protocol, storage, or compatibility impact.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How to evaluate it
+      description: Describe a reproducible check or observable outcome. Distinguish model behavior from native-runtime behavior.
+    validations:
+      required: true

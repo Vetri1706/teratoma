@@ -35,8 +35,9 @@ Use Lean 4.19.0 and run from the repository root:
 python3 scripts/verify_unbounded.py
 ```
 
-An installation outside the bundled local tools directory can be selected with
-`--lean-home /path/to/lean-4.19.0`. The runner invokes `lake build`, prints theorem
+Install Lean and Lake 4.19.0 and put them on `PATH`, or select an installation with
+`--lean-home /path/to/lean-4.19.0`. No Lean binaries are bundled in this clone.
+The runner invokes `lake build`, prints theorem
 types and kernel dependencies, and records command output, exit statuses, and
 source SHA-256 hashes in `artifacts/unbounded/`. It rejects proof escapes and
 custom axioms. The dependency report explicitly lists any use of Lean's standard

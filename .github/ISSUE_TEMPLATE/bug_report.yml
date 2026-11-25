@@ -1,0 +1,36 @@
+name: Reproducible bug
+description: Report a simulator, native-runtime, model, or documentation problem.
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Simulator or replay lab
+        - Native daemon or storage
+        - Bounded model
+        - Lean proof build
+        - Documentation or setup
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Revision and environment
+      description: Commit, OS/architecture, Python version, and compiler or Lean version where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Exact commands, seed/tick budgets, request sequence, and whether data was fresh or restarted. Use synthetic data.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+      description: Include relevant exit statuses and sanitized output. Do not post sensitive vulnerability details here; see SECURITY.md.
+    validations:
+      required: true
