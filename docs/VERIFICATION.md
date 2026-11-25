@@ -1,4 +1,27 @@
-# Historical native runtime verification
+# Runtime verification
+
+## Reproducible CI — November 25, 2026
+
+[Verification run 45654514889](https://github.com/Vetri1706/teratoma/actions/runs/45654514889)
+passed for commit `472e0d0e3304ae31f5495f9a9bd5e7192513083a`:
+
+| Check | Result |
+| --- | --- |
+| Portable Windows and Linux, Python 3.11 and 3.13 | 69 tests passed in each matrix job |
+| Linux native full suite, Python 3.13 | 81 tests passed |
+| Normal, ASan/UBSan, and TSan queue stress | Each verified 400,000 messages; no sanitizer unavailable skip |
+| Five-process OS chaos | 512 requests passed, including process kills, partitions, primary failover, and SSTable corruption |
+| Deterministic simulations and replay generation | Three fault seeds and all four demo scenarios passed |
+| Lean 4.19.0 | Clean build and kernel audit passed |
+
+The run uploads native, simulation, and Lean evidence as GitHub Actions artifacts
+with a 14-day retention period. The workflow and source remain available to
+reproduce the checks after artifacts expire. These finite tests do not certify
+production readiness or show that the executable refines the formal model.
+Inspect the [latest runs](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml)
+for later revisions.
+
+## Archived original native experiment
 
 This is an archival report of the original experiment, not a fresh result for
 the current checkout. The original raw logs, process histories, disk images,

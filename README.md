@@ -2,6 +2,8 @@
 
 **Break a replica. Watch the cluster recover.**
 
+[![Verification](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml/badge.svg)](https://github.com/Vetri1706/teratoma/actions/workflows/ci.yml)
+
 An experimental distributed-systems lab for studying replication, crash recovery,
 and protocol safety. **Teratoma** is the repository name; **AegisDB** is the engine
 and executable name used in the source.
@@ -11,9 +13,9 @@ or build the Python/C daemon to exercise real TCP connections and durable files.
 The repository also contains a bounded state explorer and a separate Lean 4
 protocol-safety development.
 
-[![The replay lab showing a real recorded network partition](docs/assets/replay-lab.jpg)](docs/DEMO.md)
+[![The replay lab showing a real recorded network partition](docs/assets/replay-lab.jpg)](https://vetri1706.github.io/teratoma/)
 
-**[Start the replay lab](docs/DEMO.md)** · [Read the fault model](docs/FAULT_MODEL.md) · [Find a first contribution](CONTRIBUTING.md)
+**[Open the replay lab](https://vetri1706.github.io/teratoma/)** · [Run it locally](docs/DEMO.md) · [Read the fault model](docs/FAULT_MODEL.md) · [Contribute](CONTRIBUTING.md)
 
 This is a research prototype for isolated local experiments. The native adapter
 is not production-qualified; read the [operating contract](docs/FAULT_MODEL.md)
@@ -98,8 +100,8 @@ prove physical storage behavior, or guarantee eventual progress.
 
 ## Verification and limits
 
-[Historical native results](docs/VERIFICATION.md) and
-[historical Lean results](docs/UNBOUNDED_VERIFICATION.md) preserve the original
+[Native verification](docs/VERIFICATION.md) and
+[Lean verification](docs/UNBOUNDED_VERIFICATION.md) link a fresh Linux CI run and preserve the original
 reported experiments and their limits. Their original raw `artifacts/` logs and
 archives are not included in this repository. The documentation identifies that
 gap and gives commands to produce new evidence.

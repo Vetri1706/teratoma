@@ -1,4 +1,16 @@
-# Historical unbounded protocol safety verification
+# Unbounded protocol safety verification
+
+## Fresh kernel audit — November 25, 2026
+
+The [Lean CI job in run 45654514889](https://github.com/Vetri1706/teratoma/actions/runs/45654514889)
+passed on commit `472e0d0e3304ae31f5495f9a9bd5e7192513083a` using Lean 4.19.0 on Linux.
+`scripts/verify_unbounded.py` completed the clean build, source escape scan, and
+dependency audit with exit status 0 and an empty failures list. The run's
+`lean-kernel-audit` artifact contains the logs and source hashes and is retained
+for 14 days. This checks the abstract Lean development, not implementation
+refinement, native storage semantics, or liveness.
+
+## Archived original proof-build report
 
 This document preserves the original proof-build report. Its raw build log,
 kernel audit, source-hash report, and proof archive are not included in this

@@ -1,6 +1,6 @@
 # Replay a failure, then inspect the evidence
 
-The [replay lab](lab/index.html) makes AegisDB's deterministic simulator visible.
+The [online replay lab](https://vetri1706.github.io/teratoma/) makes AegisDB's deterministic simulator visible.
 It shows recorded observations from the Python engine, not an independent
 JavaScript imitation of the protocol. No account, database server, compiler, or
 third-party Python package is needed.
