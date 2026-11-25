@@ -1,6 +1,17 @@
-# Unbounded protocol safety verification
+# Historical unbounded protocol safety verification
 
-Lean 4.19.0 successfully rebuilt all 10 project modules from a clean build directory, with warnings treated as errors. The source contains 51 theorem declarations in 1222 lines of Lean. All declarations were checked; no proof obligations remain open.
+This document preserves the original proof-build report. Its raw build log,
+kernel audit, source-hash report, and proof archive are not included in this
+repository; their original paths appear below as plain paths, not working links.
+The source and pinned toolchain are available for a fresh verification run.
+This document does not claim that the current revision has just passed Lean.
+Consult [GitHub Actions](https://github.com/Vetri1706/teratoma/actions) and its exact
+revision, or run the command below, for current evidence.
+
+The original report states that Lean 4.19.0 successfully rebuilt all 10 project
+modules from a clean build directory, with warnings treated as errors. It records
+51 theorem declarations in 1222 lines of Lean, all checked with no open proof
+obligations.
 
 | Executed command | Exit status | Seconds |
 | --- | ---: | ---: |
@@ -9,9 +20,13 @@ Lean 4.19.0 successfully rebuilt all 10 project modules from a clean build direc
 | lake-build | 0 | 30.752 |
 | kernel-audit | 0 | 0.516 |
 
-The dependency audit checked twelve exported results. Every audited result depends only on Lean's standard `propext` and `Quot.sound` foundations. There are no project axioms, admitted proofs, compiler-trust proof shortcuts, or uses of `Classical.choice` in these results. The source gate also rejects forbidden proof escape tokens.
+The original dependency audit records twelve exported results, depending only on
+Lean's standard `propext` and `Quot.sound` foundations. It reports no project
+axioms, admitted proofs, compiler-trust proof shortcuts, or uses of
+`Classical.choice` in those results. The verification runner also rejects
+forbidden proof escape tokens.
 
-## What is proved
+## Statements in the proof development
 
 The state machine is parameterized by `n : Nat`, an arbitrary fixed primary selection function `Nat → Fin n`, and an arbitrary command type. Quorums are strict majorities of `Fin n`, with intersection proved for every `n`. Views, logs, message histories, and execution lengths have no fixed upper bound.
 
@@ -36,15 +51,30 @@ The executable Python/C daemon and its byte-level persistence operations have no
 ## Reproduce and inspect
 
 ```sh
-python3 scripts/verify_unbounded.py
+python3 -B scripts/verify_unbounded.py
 ```
 
-Use `--lean-home /path/to/lean-4.19.0` with another installation. The toolchain is pinned and its downloaded archive hash is recorded in [toolchain-origin.json](../formal/unbounded/toolchain-origin.json).
+Install Lean and Lake 4.19.0 first and put them on `PATH`, or pass
+`--lean-home /path/to/lean-4.19.0`. No Lean binaries are bundled in this clone.
+The version is pinned in the source. The original macOS arm64 toolchain archive
+hash is recorded in [toolchain-origin.json](../formal/unbounded/toolchain-origin.json);
+that hash does not describe installations for other platforms.
 
-- [Complete successful terminal transcript](../artifacts/unbounded/complete-terminal.log)
-- [Clean Lean build output](../artifacts/unbounded/lake-build.log)
-- [Theorem statements and kernel dependency output](../artifacts/unbounded/kernel-audit.log)
-- [Exit statuses and source hashes](../artifacts/unbounded/report.json)
+Included source:
+
 - [Proof sources and model contract](../formal/unbounded/README.md)
 - [Main safety theorems](../formal/unbounded/Aegis/Safety.lean)
-- [Proof and evidence archive](../artifacts/aegisdb-unbounded-proof.zip)
+
+Original evidence paths (not included in this clone):
+
+| Evidence | Original path |
+| --- | --- |
+| Successful terminal transcript | `artifacts/unbounded/complete-terminal.log` |
+| Clean build output | `artifacts/unbounded/lake-build.log` |
+| Theorem statements and kernel dependency audit | `artifacts/unbounded/kernel-audit.log` |
+| Exit statuses and source hashes | `artifacts/unbounded/report.json` |
+| Proof/evidence archive | `artifacts/aegisdb-unbounded-proof.zip` |
+
+A fresh `verify_unbounded.py` run writes its own logs, source hashes, theorem
+dependencies, and exit statuses under `artifacts/unbounded/` by default. Preserve
+those outputs with the tested commit when sharing a new verification claim.

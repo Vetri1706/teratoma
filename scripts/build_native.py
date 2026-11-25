@@ -12,16 +12,41 @@ import sysconfig
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def prerequisites():
+    if sys.platform not in ("linux", "darwin"):
+        raise SystemExit("Native daemons require Linux or macOS POSIX APIs; on Windows, use Linux through WSL or run scripts/test_portable.py.")
+    try:
+        compiler = shlex.split(os.environ.get("CC", "clang"))
+    except ValueError as error:
+        raise SystemExit(f"Invalid CC command: {error}. Set CC to a C11 compiler, for example CC=clang or CC=gcc.") from None
+    if not compiler or shutil.which(compiler[0]) is None:
+        raise SystemExit("A C11 compiler is required. Install Clang, or set CC to an available compiler (for example CC=gcc).")
+    include_path = sysconfig.get_path("include")
+    library_directory = sysconfig.get_config_var(
+        "PYTHONFRAMEWORKPREFIX" if sysconfig.get_config_var("PYTHONFRAMEWORK") else "LIBDIR")
+    library_name = sysconfig.get_config_var("LDLIBRARY")
+    if not include_path or not library_directory or not library_name:
+        raise SystemExit(f"CPython embedding configuration is missing. Install the development headers and library matching {sys.executable}, then retry with that interpreter.")
+    include = Path(include_path)
+    library = Path(library_directory) / library_name
+    missing = [str(path) for path in (include / "Python.h", library) if not path.is_file()]
+    if missing:
+        raise SystemExit(f"CPython embedding files are missing: {', '.join(missing)}. Install the development headers and library matching {sys.executable}.")
+    if shutil.which("file") is None:
+        raise SystemExit("The 'file' utility is required to inspect the native binaries. Install your platform's file package and retry.")
+    if sys.platform == "darwin" and shutil.which("otool") is None:
+        raise SystemExit("The 'otool' utility is required on macOS. Install the Xcode Command Line Tools with xcode-select --install.")
+    return compiler, include, library
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sanitizers", action="store_true")
     parser.add_argument("--skip-stress", action="store_true")
     options = parser.parse_args(argv)
+    compiler, include, library = prerequisites()
     output = ROOT / "bin"
     output.mkdir(exist_ok=True)
-    compiler = shlex.split(os.environ.get("CC", "clang"))
-    if not compiler or shutil.which(compiler[0]) is None:
-        raise SystemExit("A C11 compiler is required")
     report = {"python": sys.version, "python_executable": sys.executable, "commands": [], "sanitizers": {}}
 
     def execute(command, required=True):
@@ -49,13 +74,6 @@ def main(argv=None):
         execute(compiler + flags + shared_flags + [queue, "-o", library_output])
         stress_output = output / "aegis_queue_stress"
         execute(compiler + flags + ["-pthread", queue, stress, "-o", stress_output])
-        include = Path(sysconfig.get_path("include"))
-        if sysconfig.get_config_var("PYTHONFRAMEWORK"):
-            library = Path(sysconfig.get_config_var("PYTHONFRAMEWORKPREFIX")) / sysconfig.get_config_var("LDLIBRARY")
-        else:
-            library = Path(sysconfig.get_config_var("LIBDIR")) / sysconfig.get_config_var("LDLIBRARY")
-        if not (include / "Python.h").is_file() or not library.is_file():
-            raise RuntimeError(f"CPython embedding headers/library missing: {include}, {library}")
         report["python_library"] = str(library)
         libraries = shlex.split((sysconfig.get_config_var("LIBS") or "") + " " + (sysconfig.get_config_var("SYSLIBS") or ""))
         daemon = output / "aegisdbd"

@@ -1,0 +1,58 @@
+name: Publish lab
+
+on:
+  workflow_run:
+    workflows: [Verification]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publish interactive lab
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Confirm the verified commit is still main
+        id: current
+        env:
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          current=$(git ls-remote origin refs/heads/main | cut -f1)
+          if [ "$current" = "$VERIFIED_SHA" ]; then
+            echo 'latest=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'A newer main commit exists; leaving its deployment to its own verification run.'
+          fi
+      - name: Configure Pages
+        if: steps.current.outputs.latest == 'true'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Package static lab
+        if: steps.current.outputs.latest == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: docs/lab
+      - name: Deploy lab
+        if: steps.current.outputs.latest == 'true'
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
